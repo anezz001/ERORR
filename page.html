@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Halaman Kedua</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    font-family: "Poppins", sans-serif;
+    background: #fff;
+    color: #000;
+  }
+
+  /* iframe tampil full layar tanpa garis */
+  iframe {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw;
+    height: 100vh;
+    border: none;
+    background: #fff;
+  }
+
+  /* tampilan mode perbaikan */
+  .maintenance {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    width: 100vw;
+    background: #000;
+    color: #fff;
+    text-align: center;
+    padding: 20px;
+    animation: fadeIn 0.8s ease;
+  }
+
+  .maintenance h1 {
+    font-size: 26px;
+    margin-bottom: 10px;
+  }
+
+  .maintenance p {
+    font-size: 16px;
+    color: #ccc;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.98); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  /* pesan jika belum ada link */
+  .nolink {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background: #fff;
+    color: #000;
+    text-align: center;
+    padding: 20px;
+    animation: fadeIn 0.6s ease;
+  }
+</style>
+</head>
+<body>
+<div id="container"></div>
+
+<script>
+const KEY_LINK = 'pageLink';
+const KEY_MAINT = 'maintenanceMode';
+const container = document.getElementById('container');
+
+function showMaintenance(){
+  container.innerHTML = `
+    <div class="maintenance">
+      <h1>loding.......</h1>
+      <p>apk ini sedang di update oleh admin.</p>
+    </div>
+  `;
+}
+
+function showLink(url){
+  if(!url){
+    container.innerHTML = `
+      <div class="nolink">
+        <h1>harap sabar...</h1>
+        <p>apk ini lagi ada perbaikan oleh admin .</p>
+      </div>
+    `;
+    return;
+  }
+  const iframe = document.createElement('iframe');
+  iframe.src = url;
+  iframe.allowFullscreen = true;
+  container.innerHTML = '';
+  container.appendChild(iframe);
+}
+
+(function(){
+  const maint = localStorage.getItem(KEY_MAINT) === 'true';
+  const link = localStorage.getItem(KEY_LINK);
+  if(maint) showMaintenance();
+  else showLink(link);
+})();
+</script>
+</body>
+</html>
